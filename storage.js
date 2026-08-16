@@ -1,26 +1,16 @@
-/* =========================================================
-   RISK IQ - STORAGE ENGINE
-   ========================================================= */
-
 const RiskIQStorage = {
 
-    /* =====================================================
-       APPLICATIONS
-       ===================================================== */
+    // ================= APPLICATIONS =================
 
     getApplications() {
-
         return JSON.parse(
             localStorage.getItem("riskIQApplications") || "[]"
         );
-
     },
-
 
     saveApplication(application) {
 
-        const applications =
-            this.getApplications();
+        const applications = this.getApplications();
 
         applications.push(application);
 
@@ -28,13 +18,10 @@ const RiskIQStorage = {
             "riskIQApplications",
             JSON.stringify(applications)
         );
-
     },
 
 
-    /* =====================================================
-       RISK RULES
-       ===================================================== */
+    // ================= RISK RULES =================
 
     getRules() {
 
@@ -43,7 +30,6 @@ const RiskIQStorage = {
         );
 
     },
-
 
     saveRules(rules) {
 
@@ -55,27 +41,79 @@ const RiskIQStorage = {
     },
 
 
-    /* =====================================================
-       VERIFICATION DATA
-       ===================================================== */
+    // ================= LOGIN =================
+
+    isLoggedIn() {
+
+        return localStorage.getItem(
+            "riskIQLoggedIn"
+        ) === "true";
+
+    },
+
+
+    login(user) {
+
+        localStorage.setItem(
+            "riskIQLoggedIn",
+            "true"
+        );
+
+        localStorage.setItem(
+            "riskiq_user",
+            JSON.stringify(user)
+        );
+
+    },
+
+
+    logout() {
+
+        localStorage.removeItem(
+            "riskIQLoggedIn"
+        );
+
+        localStorage.removeItem(
+            "riskiq_user"
+        );
+
+        window.location.href =
+            "login.html";
+
+    },
+
+
+    // ================= PAGE PROTECTION =================
+
+    protectPage() {
+
+        if (!this.isLoggedIn()) {
+
+            window.location.href =
+                "login.html";
+
+        }
+
+    },
+
+
+    // ================= VERIFICATION DATA =================
 
     getVerificationData() {
 
-        const stored =
-            localStorage.getItem("riskIQVerificationData");
+        const existing =
+            localStorage.getItem(
+                "riskIQVerificationData"
+            );
 
-        if (stored) {
+        if (existing) {
 
-            return JSON.parse(stored);
+            return JSON.parse(existing);
 
         }
 
 
-        /*
-         * DEMO VERIFICATION RECORD
-         *
-         * This is only for demonstrating the prototype.
-         */
+        // Demo borrower
 
         const demoData = [
 
@@ -84,23 +122,7 @@ const RiskIQStorage = {
                 fullName: "John Molefe",
                 employmentStatus: "employed",
                 monthlyIncome: 15000,
-                monthlyDebt: 2500
-            },
-
-            {
-                idNumber: "987654321",
-                fullName: "Thato Motsamai",
-                employmentStatus: "self-employed",
-                monthlyIncome: 12000,
-                monthlyDebt: 1500
-            },
-
-            {
-                idNumber: "456789123",
-                fullName: "Naledi Kgosidintsi",
-                employmentStatus: "business-owner",
-                monthlyIncome: 20000,
-                monthlyDebt: 3000
+                monthlyDebt: 2000
             }
 
         ];
@@ -113,55 +135,6 @@ const RiskIQStorage = {
 
 
         return demoData;
-
-    },
-
-
-    /* =====================================================
-       LOGIN
-       ===================================================== */
-
-    isLoggedIn() {
-
-        /*
-         * Demo mode.
-         *
-         * If no login system has been created yet,
-         * allow the application to work.
-         */
-
-        return true;
-
-    },
-
-
-    /* =====================================================
-       PAGE PROTECTION
-       ===================================================== */
-
-    protectPage() {
-
-        /*
-         * Login protection can be added later.
-         */
-
-        return true;
-
-    },
-
-
-    /* =====================================================
-       LOGOUT
-       ===================================================== */
-
-    logout() {
-
-        localStorage.removeItem(
-            "riskIQLoggedIn"
-        );
-
-        window.location.href =
-            "login.html";
 
     }
 
