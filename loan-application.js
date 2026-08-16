@@ -1,147 +1,463 @@
-RiskIQStorage.protectPage();
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Risk IQ | Loan Applications</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="loan-applications.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+</head>
 
 
-function loadApplications() {
+<body>
 
-    const applications =
-        RiskIQStorage.getApplications();
-
-
-    document.getElementById(
-        "totalApplications"
-    ).textContent = applications.length;
+<div class="app">
 
 
-    document.getElementById(
-        "approvedApplications"
-    ).textContent =
-        applications.filter(
-            app => app.decision === "APPROVED"
-        ).length;
+    <!-- SIDEBAR -->
 
+    <aside class="sidebar">
 
-    document.getElementById(
-        "declinedApplications"
-    ).textContent =
-        applications.filter(
-            app => app.decision === "DECLINED"
-        ).length;
+        <div class="brand">
 
+            <div class="brand-logo">
 
-    document.getElementById(
-        "reviewApplications"
-    ).textContent =
-        applications.filter(
-            app => app.decision === "HUMAN REVIEW"
-        ).length;
-
-
-    const list =
-        document.getElementById(
-            "applicationList"
-        );
-
-
-    list.innerHTML = "";
-
-
-    if (applications.length === 0) {
-
-        list.innerHTML = `
-
-            <div class="empty-state">
-
-                <i class="fa-solid fa-file-circle-xmark"></i>
-
-                <h3>No loan applications yet</h3>
-
-                <p>
-                    Applications will appear here after a
-                    borrower assessment is completed.
-                </p>
+                <i class="fa-solid fa-shield-halved"></i>
 
             </div>
 
-        `;
+            <div>
 
-        return;
+                <h1>
+                    RISK <span>IQ</span>
+                </h1>
 
-    }
-
-
-    applications.forEach(application => {
-
-        const row =
-            document.createElement("div");
-
-        row.className = "comparison-row";
-
-        const decision =
-            application.decision || "HUMAN REVIEW";
-
-
-        row.innerHTML = `
-
-            <span>
-                <strong>
-                    ${escapeHTML(
-                        application.fullName || "Unknown"
-                    )}
-                </strong>
-            </span>
-
-
-            <span>
-
-                ${application.riskScore ?? "--"}
-
-                /100
-
-            </span>
-
-
-            <span>
-
-                <span class="status ${
-                    decision === "APPROVED"
-                        ? "good"
-                        : decision === "DECLINED"
-                            ? "bad"
-                            : "review"
-                }">
-
-                    ${decision}
-
+                <span>
+                    AI RISK INTELLIGENCE
                 </span>
 
-            </span>
+            </div>
+
+        </div>
 
 
-            <span>
+        <button
+            class="sidebar-toggle"
+            onclick="toggleSidebar()"
+            type="button"
+        >
 
-                ${
-                    application.createdAt
-                    ? new Date(
-                        application.createdAt
-                      ).toLocaleDateString()
-                    : "--"
-                }
+            <i class="fa-solid fa-chevron-left"></i>
 
-            </span>
-
-        `;
+        </button>
 
 
-        list.appendChild(row);
+        <nav class="navigation">
 
-    });
+            <a
+                href="index.html"
+                class="nav-item"
+            >
 
-}
+                <i class="fa-solid fa-chart-line"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
 
 
-// ===============================
-// SIDEBAR
-// ===============================
+            <a
+                href="loan-applications.html"
+                class="nav-item active"
+            >
+
+                <i class="fa-solid fa-file-lines"></i>
+
+                <span>
+                    Loan Applications
+                </span>
+
+            </a>
+
+
+            <a
+                href="risk-assessment.html"
+                class="nav-item"
+            >
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <span>
+                    Risk Assessment
+                </span>
+
+            </a>
+
+
+            <a
+                href="risk-rules.html"
+                class="nav-item"
+            >
+
+                <i class="fa-solid fa-sliders"></i>
+
+                <span>
+                    Risk Rules
+                </span>
+
+            </a>
+
+
+            <a
+                href="monitoring.html"
+                class="nav-item"
+            >
+
+                <i class="fa-solid fa-bell"></i>
+
+                <span>
+                    Monitoring
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="admin-profile">
+
+                <div class="avatar">
+                    RI
+                </div>
+
+                <div>
+
+                    <strong>
+                        Admin
+                    </strong>
+
+                    <small>
+                        Risk Manager
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="logout-btn"
+                onclick="RiskIQStorage.logout()"
+                type="button"
+            >
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                <span>
+                    Logout
+                </span>
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+
+                <div class="breadcrumb">
+                    RISK IQ / LOAN APPLICATIONS
+                </div>
+
+                <h2>
+                    Loan Applications
+                </h2>
+
+            </div>
+
+
+            <div class="top-actions">
+
+                <div class="system-status">
+
+                    <span></span>
+
+                    Risk Engine Online
+
+                </div>
+
+
+                <div class="top-avatar">
+                    RI
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <section class="content">
+
+            <div class="page-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        BORROWER PORTFOLIO
+                    </p>
+
+                    <h1>
+                        Loan Applications
+                    </h1>
+
+                    <p>
+                        Review borrower assessments, risk scores and lending decisions.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- STATISTICS -->
+
+            <div class="application-stats">
+
+                <div class="application-stat">
+
+                    <span>
+                        Total Applications
+                    </span>
+
+                    <strong id="totalApplications">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="application-stat">
+
+                    <span>
+                        Approved
+                    </span>
+
+                    <strong id="approvedApplications">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="application-stat">
+
+                    <span>
+                        Human Review
+                    </span>
+
+                    <strong id="reviewApplications">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="application-stat">
+
+                    <span>
+                        Declined
+                    </span>
+
+                    <strong id="declinedApplications">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FILTER -->
+
+            <div class="card filter-card">
+
+                <div class="filter-row">
+
+                    <div class="search-box">
+
+                        <i class="fa-solid fa-search"></i>
+
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Search borrower..."
+                        >
+
+                    </div>
+
+
+                    <select id="decisionFilter">
+
+                        <option value="all">
+                            All Decisions
+                        </option>
+
+                        <option value="APPROVED">
+                            Approved
+                        </option>
+
+                        <option value="HUMAN REVIEW">
+                            Human Review
+                        </option>
+
+                        <option value="DECLINED">
+                            Declined
+                        </option>
+
+                    </select>
+
+
+                    <button
+                        class="refresh-button"
+                        id="refreshButton"
+                        type="button"
+                    >
+
+                        <i class="fa-solid fa-rotate"></i>
+
+                        Refresh
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- APPLICATIONS -->
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <div class="header-icon">
+
+                        <i class="fa-solid fa-file-lines"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Applications
+                        </h3>
+
+                        <p>
+                            Borrowers assessed through Risk IQ.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    BORROWER
+                                </th>
+
+                                <th>
+                                    LOAN
+                                </th>
+
+                                <th>
+                                    RISK SCORE
+                                </th>
+
+                                <th>
+                                    VERIFICATION
+                                </th>
+
+                                <th>
+                                    DECISION
+                                </th>
+
+                                <th>
+                                    DATE
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="applicationsTable"
+                        ></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="storage.js"></script>
+
+<script src="loan-applications.js"></script>
+
+
+<script>
 
 function toggleSidebar() {
 
@@ -156,17 +472,8 @@ function toggleSidebar() {
 
 }
 
+</script>
 
-function escapeHTML(value) {
+</body>
 
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-
-}
-
-
-loadApplications();
+</html>
