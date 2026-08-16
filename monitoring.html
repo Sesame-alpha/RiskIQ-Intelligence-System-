@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Risk IQ | Monitoring</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="monitoring.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+
+            <div>
+                <h1>RISK <span>IQ</span></h1>
+                <span>AI RISK INTELLIGENCE</span>
+            </div>
+
+        </div>
+
+        <button
+            class="sidebar-toggle"
+            onclick="toggleSidebar()"
+            aria-label="Toggle sidebar"
+            type="button"
+        >
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+
+        <nav class="navigation">
+
+            <a href="index.html" class="nav-item">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a href="loan-applications.html" class="nav-item">
+
+                <i class="fa-solid fa-file-lines"></i>
+
+                <span>
+                    Loan Applications
+                </span>
+
+            </a>
+
+
+            <a href="risk-assessment.html" class="nav-item">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <span>
+                    Risk Assessment
+                </span>
+
+            </a>
+
+
+            <a href="risk-rules.html" class="nav-item">
+
+                <i class="fa-solid fa-sliders"></i>
+
+                <span>
+                    Risk Rules
+                </span>
+
+            </a>
+
+
+            <a href="monitoring.html" class="nav-item active">
+
+                <i class="fa-solid fa-bell"></i>
+
+                <span>
+                    Monitoring
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="admin-profile">
+
+                <div class="avatar">
+                    AD
+                </div>
+
+                <div>
+
+                    <strong>
+                        Admin
+                    </strong>
+
+                    <small>
+                        System Administrator
+                    </small>
+
+                </div>
+
+            </div>
+
+            <button class="logout-btn" onclick="RiskIQStorage.logout()" type="button">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span>
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+        <!-- ================= TOPBAR ================= -->
+
+        <header class="topbar">
+
+            <div class="page-title">
+
+                <div class="breadcrumb">
+                    Risk IQ / Monitoring
+                </div>
+
+                <h2>
+                    Portfolio Monitoring
+                </h2>
+
+            </div>
+
+
+            <div class="top-actions">
+
+                <button class="icon-button" type="button">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                </button>
+
+
+                <button
+                    class="icon-button notification"
+                    onclick="refreshMonitoring()"
+                    type="button"
+                >
+
+                    <i class="fa-solid fa-bell"></i>
+
+                    <span></span>
+
+                </button>
+
+
+                <div class="top-profile">
+
+                    <div class="avatar">
+                        AD
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <small>
+                            Micro Lending
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= CONTENT ================= -->
+
+        <section class="content">
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="page-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        RISK IQ MONITORING
+                    </p>
+
+                    <h1>
+                        Portfolio Monitoring
+                    </h1>
+
+                    <p>
+                        Monitor borrower repayment behaviour and identify
+                        early warning signals before loans become defaults.
+                    </p>
+
+                </div>
+
+
+                <div class="monitoring-status">
+
+                    <span class="live-dot"></span>
+
+                    <span>
+                        Monitoring Active
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= KPI CARDS ================= -->
+
+            <div class="kpi-grid">
+
+
+                <div class="kpi-card">
+
+                    <div class="kpi-icon">
+
+                        <i class="fa-solid fa-wallet"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Active Loans
+                        </span>
+
+                        <strong id="activeLoans">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="kpi-card">
+
+                    <div class="kpi-icon warning-icon">
+
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Early Warnings
+                        </span>
+
+                        <strong id="warningCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="kpi-card">
+
+                    <div class="kpi-icon danger-icon">
+
+                        <i class="fa-solid fa-clock"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Late Payments
+                        </span>
+
+                        <strong id="lateCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="kpi-card">
+
+                    <div class="kpi-icon critical-icon">
+
+                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Default Risk
+                        </span>
+
+                        <strong id="defaultCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= ALERT SECTION ================= -->
+
+            <div class="section-title">
+
+                <h2>
+                    Early Warning Alerts
+                </h2>
+
+                <p>
+                    Risk IQ automatically highlights borrowers requiring attention.
+                </p>
+
+            </div>
+
+
+            <div
+                class="monitoring-alerts"
+                id="monitoringAlerts"
+            >
+
+                <!-- JS inserts alerts -->
+
+            </div>
+
+
+            <!-- ================= MONITORING TABLE ================= -->
+
+            <div class="card monitoring-table-card">
+
+                <div class="panel-title">
+
+                    <div>
+
+                        <h3>
+                            Borrower Monitoring
+                        </h3>
+
+                        <p>
+                            Current repayment and loan behaviour.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        class="secondary-button"
+                        onclick="refreshMonitoring()"
+                        type="button"
+                    >
+
+                        <i class="fa-solid fa-rotate"></i>
+
+                        Refresh
+
+                    </button>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Borrower
+                                </th>
+
+                                <th>
+                                    Contact
+                                </th>
+
+                                <th>
+                                    Loan
+                                </th>
+
+                                <th>
+                                    Payment Status
+                                </th>
+
+                                <th>
+                                    Days
+                                </th>
+
+                                <th>
+                                    Risk
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="monitoringTable">
+
+                            <!-- JS inserts rows -->
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= INFORMATION ================= -->
+
+            <div class="monitoring-information">
+
+
+                <div class="card information-card">
+
+                    <div class="information-icon">
+
+                        <i class="fa-solid fa-eye"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Continuous Monitoring
+                        </h3>
+
+                        <p>
+                            Risk IQ tracks repayment behaviour and
+                            identifies changes that may indicate increasing
+                            borrower risk.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card information-card">
+
+                    <div class="information-icon">
+
+                        <i class="fa-solid fa-bolt"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Early Intervention
+                        </h3>
+
+                        <p>
+                            Lenders can investigate warning signals and
+                            intervene before a payment problem becomes
+                            a larger default.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card information-card">
+
+                    <div class="information-icon">
+
+                        <i class="fa-solid fa-user-shield"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Human Oversight
+                        </h3>
+
+                        <p>
+                            Alerts support lending officers rather than
+                            replacing human judgement.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ================= SCRIPTS ================= -->
+
+<script src="storage.js"></script>
+<script src="monitoring.js"></script>
+
+</body>
+
+</html>
