@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Risk IQ | Login</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="login.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="login-page">
+
+
+    <!-- LEFT SIDE -->
+
+    <section class="login-branding">
+
+
+        <div class="branding-content">
+
+
+            <div class="logo-row">
+
+                <div class="login-logo">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+
+
+                <div class="logo-text">
+
+                    <h1>
+                        RISK <span>IQ</span>
+                    </h1>
+
+                    <small>
+                        AI RISK INTELLIGENCE
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="branding-message">
+
+                <p class="eyebrow">
+                    SMARTER LENDING DECISIONS
+                </p>
+
+                <h2>
+                    Intelligence for
+                    <span>confident lending.</span>
+                </h2>
+
+                <p>
+                    Risk IQ helps lenders assess borrowers,
+                    understand risk and make more informed
+                    lending decisions.
+                </p>
+
+            </div>
+
+
+            <div class="feature-list">
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+
+                    <div>
+                        <strong>
+                            Risk Assessment
+                        </strong>
+
+                        <small>
+                            Score borrowers out of 100
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+
+                    <div>
+                        <strong>
+                            Custom Rules
+                        </strong>
+
+                        <small>
+                            Build lending rules for your organisation
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+
+                    <div>
+                        <strong>
+                            Early Warnings
+                        </strong>
+
+                        <small>
+                            Monitor loans and identify risks early
+                        </small>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div class="branding-footer">
+
+            RISK IQ DEMO PLATFORM
+
+        </div>
+
+
+    </section>
+
+
+    <!-- RIGHT SIDE -->
+
+    <section class="login-section">
+
+
+        <div class="login-card">
+
+
+            <div class="login-heading">
+
+                <p class="eyebrow">
+                    SECURE ACCESS
+                </p>
+
+                <h2>
+                    Welcome back
+                </h2>
+
+                <p>
+                    Sign in to access your Risk IQ dashboard.
+                </p>
+
+            </div>
+
+
+            <!-- LOGIN FORM -->
+
+            <form id="loginForm">
+
+
+                <div class="form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        <input
+                            type="text"
+                            id="username"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                        >
+
+                        <button
+                            type="button"
+                            class="show-password"
+                            id="showPassword"
+                        >
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ERROR -->
+
+                <div
+                    class="login-error"
+                    id="loginError"
+                >
+                    <i class="fa-solid fa-circle-exclamation"></i>
+
+                    <span>
+                        Incorrect username or password.
+                    </span>
+                </div>
+
+
+                <!-- BUTTON -->
+
+                <button
+                    type="submit"
+                    class="login-button"
+                >
+                    <span>
+                        Sign In
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+
+
+            </form>
+
+
+            <!-- DEMO DETAILS -->
+
+            <div class="demo-box">
+
+                <div class="demo-title">
+
+                    <i class="fa-solid fa-flask"></i>
+
+                    Demo Access
+
+                </div>
+
+
+                <div class="demo-details">
+
+                    <div>
+
+                        <span>
+                            USERNAME
+                        </span>
+
+                        <strong>
+                            codecatalysts
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            PASSWORD
+                        </span>
+
+                        <strong>
+                            1111
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <p class="login-footer">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                Secure Demo Environment
+
+            </p>
+
+
+        </div>
+
+
+    </section>
+
+
+</div>
+
+
+<script src="storage.js"></script>
+<script src="login.js"></script>
+
+
+</body>
+</html>
