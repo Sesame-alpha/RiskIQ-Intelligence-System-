@@ -1,1 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Risk IQ | Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="dashboard.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+</head>
+
+<body>
+
+<div class="app">
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar" id="sidebar">
+
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+
+            <div class="brand-text">
+
+                <h1>
+                    RISK <span>IQ</span>
+                </h1>
+
+                <small>
+                    AI RISK INTELLIGENCE
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- SIDEBAR TOGGLE -->
+
+        <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+        >
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="navigation">
+
+            <a
+                href="index.html"
+                class="nav-item active"
+            >
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+
+
+            <a
+                href="loan-applications.html"
+                class="nav-item"
+            >
+                <i class="fa-solid fa-file-lines"></i>
+                <span>Loan Applications</span>
+            </a>
+
+
+            <a
+                href="risk-assessment.html"
+                class="nav-item"
+            >
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Risk Assessment</span>
+            </a>
+
+
+            <a
+                href="risk-rules.html"
+                class="nav-item"
+            >
+                <i class="fa-solid fa-sliders"></i>
+                <span>Risk Rules</span>
+            </a>
+
+
+            <a
+                href="monitoring.html"
+                class="nav-item"
+            >
+                <i class="fa-solid fa-tower-broadcast"></i>
+                <span>Monitoring</span>
+            </a>
+
+        </nav>
+
+
+        <!-- USER -->
+
+        <div class="sidebar-bottom">
+
+            <div class="admin-profile">
+
+                <div class="avatar">
+                    CC
+                </div>
+
+                <div class="admin-info">
+
+                    <strong id="sidebarUserName">
+                        CodeCatalysts
+                    </strong>
+
+                    <small>
+                        Risk Intelligence
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main
+        class="main"
+        id="main"
+    >
+
+
+        <!-- ================= TOPBAR ================= -->
+
+        <header class="topbar">
+
+
+            <div class="top-title">
+
+                <p>
+                    OVERVIEW / DASHBOARD
+                </p>
+
+                <h2>
+                    Risk Intelligence Dashboard
+                </h2>
+
+            </div>
+
+
+            <div class="top-actions">
+
+
+                <div class="live-status">
+
+                    <span></span>
+
+                    SYSTEM LIVE
+
+                </div>
+
+
+                <div class="top-user">
+
+                    <div class="avatar">
+                        CC
+                    </div>
+
+                    <div>
+
+                        <strong id="topUserName">
+                            CodeCatalysts
+                        </strong>
+
+                        <small>
+                            Administrator
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="logout-btn icon-only"
+                    id="logoutBtn"
+                    type="button"
+                    title="Logout"
+                >
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= CONTENT ================= -->
+
+        <section class="content">
+
+
+            <!-- ================= WELCOME ================= -->
+
+            <div class="welcome-section">
+
+
+                <div>
+
+                    <p class="eyebrow">
+                        SMARTER LENDING DECISIONS
+                    </p>
+
+                    <h1>
+                        Welcome back,
+                        <span id="welcomeUser">
+                            CodeCatalysts
+                        </span>
+                    </h1>
+
+                    <p class="welcome-text">
+                        Monitor borrower risk, track assessments
+                        and make confident lending decisions using
+                        intelligent risk analysis.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="risk-assessment.html"
+                    class="assessment-btn"
+                >
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Run Risk Assessment
+
+                </a>
+
+
+            </div>
+
+
+            <!-- ================= KPI CARDS ================= -->
+
+            <div class="kpi-grid">
+
+
+                <!-- TOTAL -->
+
+                <div class="kpi-card">
+
+                    <div class="kpi-header">
+
+                        <div class="kpi-icon">
+                            <i class="fa-solid fa-file-lines"></i>
+                        </div>
+
+                        <span>
+                            TOTAL ASSESSMENTS
+                        </span>
+
+                    </div>
+
+                    <strong id="totalApplications">
+                        0
+                    </strong>
+
+                    <small>
+                        Borrowers assessed
+                    </small>
+
+                </div>
+
+
+                <!-- APPROVED -->
+
+                <div class="kpi-card">
+
+                    <div class="kpi-header">
+
+                        <div class="kpi-icon approved-icon">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+
+                        <span>
+                            APPROVED
+                        </span>
+
+                    </div>
+
+                    <strong id="approvedApplications">
+                        0
+                    </strong>
+
+                    <small>
+                        Low risk applications
+                    </small>
+
+                </div>
+
+
+                <!-- MEDIUM -->
+
+                <div class="kpi-card">
+
+                    <div class="kpi-header">
+
+                        <div class="kpi-icon medium-icon">
+                            <i class="fa-solid fa-scale-balanced"></i>
+                        </div>
+
+                        <span>
+                            MEDIUM RISK
+                        </span>
+
+                    </div>
+
+                    <strong id="mediumApplications">
+                        0
+                    </strong>
+
+                    <small>
+                        Requires review
+                    </small>
+
+                </div>
+
+
+                <!-- HIGH -->
+
+                <div class="kpi-card">
+
+                    <div class="kpi-header">
+
+                        <div class="kpi-icon high-icon">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+
+                        <span>
+                            HIGH RISK
+                        </span>
+
+                    </div>
+
+                    <strong id="highApplications">
+                        0
+                    </strong>
+
+                    <small>
+                        High risk borrowers
+                    </small>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ================= MIDDLE SECTION ================= -->
+
+            <div class="dashboard-grid">
+
+
+                <!-- RECENT ASSESSMENTS -->
+
+                <div class="panel recent-panel">
+
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <p class="panel-eyebrow">
+                                RECENT ACTIVITY
+                            </p>
+
+                            <h3>
+                                Recent Assessments
+                            </h3>
+
+                        </div>
+
+
+                        <a
+                            href="loan-applications.html"
+                            class="view-all"
+                        >
+                            View All
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+
+                    </div>
+
+
+                    <div
+                        id="recentApplications"
+                        class="applications-list"
+                    >
+
+
+                        <!-- JavaScript puts applications here -->
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- RISK DISTRIBUTION -->
+
+                <div class="panel risk-panel">
+
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <p class="panel-eyebrow">
+                                RISK OVERVIEW
+                            </p>
+
+                            <h3>
+                                Risk Distribution
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="risk-score-display">
+
+                        <div class="average-score">
+
+                            <strong id="averageScore">
+                                0
+                            </strong>
+
+                            <span>
+                                AVERAGE SCORE
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="risk-distribution">
+
+
+                        <!-- LOW -->
+
+                        <div class="distribution-item">
+
+                            <div class="distribution-header">
+
+                                <span>
+
+                                    <i class="fa-solid fa-circle low"></i>
+
+                                    Low Risk
+
+                                </span>
+
+                                <strong id="lowPercent">
+                                    0%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="progress-bar">
+
+                                <div
+                                    class="progress-fill low-fill"
+                                    id="lowBar"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- MEDIUM -->
+
+                        <div class="distribution-item">
+
+                            <div class="distribution-header">
+
+                                <span>
+
+                                    <i class="fa-solid fa-circle medium"></i>
+
+                                    Medium Risk
+
+                                </span>
+
+                                <strong id="mediumPercent">
+                                    0%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="progress-bar">
+
+                                <div
+                                    class="progress-fill medium-fill"
+                                    id="mediumBar"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- HIGH -->
+
+                        <div class="distribution-item">
+
+                            <div class="distribution-header">
+
+                                <span>
+
+                                    <i class="fa-solid fa-circle high"></i>
+
+                                    High Risk
+
+                                </span>
+
+                                <strong id="highPercent">
+                                    0%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="progress-bar">
+
+                                <div
+                                    class="progress-fill high-fill"
+                                    id="highBar"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="score-guide">
+
+                        <p>
+                            <strong>75–100</strong>
+                            Low Risk
+                        </p>
+
+                        <p>
+                            <strong>50–74</strong>
+                            Medium Risk
+                        </p>
+
+                        <p>
+                            <strong>0–49</strong>
+                            High Risk
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ================= BOTTOM SECTION ================= -->
+
+            <div class="bottom-grid">
+
+
+                <!-- ENGINE -->
+
+                <div class="panel engine-panel">
+
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <p class="panel-eyebrow">
+                                RISK IQ ENGINE
+                            </p>
+
+                            <h3>
+                                Engine Status
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="engine-list">
+
+
+                        <div class="engine-item">
+
+                            <div class="engine-icon">
+
+                                <i class="fa-solid fa-sliders"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    Custom Risk Rules
+                                </strong>
+
+                                <small id="ruleCount">
+                                    0 active rules
+                                </small>
+
+                            </div>
+
+
+                            <span class="status-ready">
+                                ACTIVE
+                            </span>
+
+                        </div>
+
+
+                        <div class="engine-item">
+
+                            <div class="engine-icon">
+
+                                <i class="fa-solid fa-shield-check"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    Data Verification
+                                </strong>
+
+                                <small>
+                                    Ready to check borrower information
+                                </small>
+
+                            </div>
+
+
+                            <span class="status-ready">
+                                READY
+                            </span>
+
+                        </div>
+
+
+                        <div class="engine-item">
+
+                            <div class="engine-icon">
+
+                                <i class="fa-solid fa-brain"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    Risk Reasoning
+                                </strong>
+
+                                <small>
+                                    Explains why each score was given
+                                </small>
+
+                            </div>
+
+
+                            <span class="status-ready">
+                                ONLINE
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <a
+                        href="risk-rules.html"
+                        class="manage-link"
+                    >
+                        Manage Risk Rules
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+
+
+                </div>
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="panel quick-panel">
+
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <p class="panel-eyebrow">
+                                QUICK ACCESS
+                            </p>
+
+                            <h3>
+                                Get Started
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="quick-actions">
+
+
+                        <a
+                            href="risk-assessment.html"
+                            class="quick-action"
+                        >
+
+                            <div class="quick-icon">
+
+                                <i class="fa-solid fa-user-check"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    Assess a Borrower
+                                </strong>
+
+                                <small>
+                                    Verify data and calculate risk
+                                </small>
+
+                            </div>
+
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </a>
+
+
+                        <a
+                            href="loan-applications.html"
+                            class="quick-action"
+                        >
+
+                            <div class="quick-icon">
+
+                                <i class="fa-solid fa-folder-open"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    Review Applications
+                                </strong>
+
+                                <small>
+                                    View all assessment decisions
+                                </small>
+
+                            </div>
+
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </a>
+
+
+                        <a
+                            href="monitoring.html"
+                            class="quick-action"
+                        >
+
+                            <div class="quick-icon">
+
+                                <i class="fa-solid fa-tower-broadcast"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    Monitoring Alerts
+                                </strong>
+
+                                <small>
+                                    Track late and at-risk repayments
+                                </small>
+
+                            </div>
+
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="dashboard-footer">
+
+                <span>
+                    <i class="fa-solid fa-shield-halved"></i>
+                    RISK IQ DEMO PLATFORM
+                </span>
+
+                <small>
+                    AI-Powered Risk Intelligence for Smarter Lending
+                </small>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+
+</div>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script src="storage.js"></script>
+<script src="dashboard.js"></script>
+
+</body>
+</html>
 
