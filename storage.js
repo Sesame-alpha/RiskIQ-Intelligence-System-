@@ -164,9 +164,9 @@ const RiskIQStorage = {
 
             {
                 idNumber: "123456789",
-                fullName: "John Molefe",
+                fullName: "Sesame Dithupa",
                 employmentStatus: "employed",
-                monthlyIncome: 15000,
+                monthlyIncome: 10000,
                 monthlyDebt: 2500
             }
 
