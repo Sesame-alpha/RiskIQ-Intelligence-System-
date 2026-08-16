@@ -1,496 +1,561 @@
-/* =========================================================
-   RISK IQ - LOAN APPLICATIONS
-   ========================================================= */
+/* =========================================
+   RISK IQ - RISK RULES
+========================================= */
+
+
+let editingRuleId = null;
+
+
+/* =========================================
+   DEFAULT RULES
+========================================= */
+
+const defaultRules = [
+
+    {
+        id: 1,
+        name: "Good Repayment Behaviour",
+        field: "repaymentBehaviour",
+        condition: "good",
+        points: 25
+    },
+
+    {
+        id: 2,
+        name: "Stable Income",
+        field: "incomeStability",
+        condition: "stable",
+        points: 20
+    },
+
+    {
+        id: 3,
+        name: "No Previous Defaults",
+        field: "previousDefaults",
+        condition: "zero",
+        points: 25
+    },
+
+    {
+        id: 4,
+        name: "Low Debt Ratio",
+        field: "debtRatio",
+        condition: "low",
+        points: 15
+    },
+
+    {
+        id: 5,
+        name: "Good Affordability",
+        field: "affordability",
+        condition: "good",
+        points: 15
+    }
+
+];
+
+
+/* =========================================
+   LOAD PAGE
+========================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
     function () {
 
+        let rules =
+            RiskIQStorage.getRules();
 
-        const searchInput =
-            document.getElementById(
-                "searchInput"
+
+        /*
+         * Add the five rules automatically
+         * the first time the page is opened.
+         */
+
+        if (rules.length === 0) {
+
+            rules = defaultRules;
+
+            RiskIQStorage.saveRules(
+                rules
             );
-
-
-        const decisionFilter =
-            document.getElementById(
-                "decisionFilter"
-            );
-
-
-        const refreshButton =
-            document.getElementById(
-                "refreshButton"
-            );
-
-
-        searchInput.addEventListener(
-            "input",
-            renderApplications
-        );
-
-
-        decisionFilter.addEventListener(
-            "change",
-            renderApplications
-        );
-
-
-        refreshButton.addEventListener(
-            "click",
-            renderApplications
-        );
-
-
-        renderApplications();
-
-
-
-        /* =================================================
-           RENDER
-           ================================================= */
-
-        function renderApplications() {
-
-            const applications =
-                RiskIQStorage.getApplications();
-
-
-            updateStats(
-                applications
-            );
-
-
-            const search =
-                searchInput.value
-                    .trim()
-                    .toLowerCase();
-
-
-            const filter =
-                decisionFilter.value;
-
-
-            const filtered =
-                applications.filter(
-                    function (application) {
-
-                        const name =
-                            String(
-                                application.fullName || ""
-                            ).toLowerCase();
-
-
-                        const id =
-                            String(
-                                application.idNumber || ""
-                            ).toLowerCase();
-
-
-                        const matchesSearch =
-                            name.includes(search) ||
-                            id.includes(search);
-
-
-                        const matchesDecision =
-                            filter === "all" ||
-                            application.decision === filter;
-
-
-                        return (
-                            matchesSearch &&
-                            matchesDecision
-                        );
-
-                    }
-                );
-
-
-            const table =
-                document.getElementById(
-                    "applicationsTable"
-                );
-
-
-            table.innerHTML = "";
-
-
-            if (filtered.length === 0) {
-
-                table.innerHTML = `
-
-                    <tr>
-
-                        <td
-                            colspan="6"
-                            class="empty-table"
-                        >
-
-                            <i class="fa-solid fa-file-circle-xmark"></i>
-
-                            <strong>
-                                No applications found
-                            </strong>
-
-                            <span>
-                                Completed borrower assessments will appear here.
-                            </span>
-
-                        </td>
-
-                    </tr>
-
-                `;
-
-                return;
-
-            }
-
-
-            /*
-             * Newest applications first
-             */
-
-            filtered
-                .slice()
-                .reverse()
-                .forEach(
-                    function (application) {
-
-                        table.appendChild(
-                            createRow(
-                                application
-                            )
-                        );
-
-                    }
-                );
 
         }
 
 
+        displayRules();
 
-        /* =================================================
-           CREATE TABLE ROW
-           ================================================= */
-
-        function createRow(
-            application
-        ) {
-
-            const row =
-                document.createElement("tr");
+    }
+);
 
 
-            const score =
-                Number(
-                    application.riskScore
-                ) || 0;
+/* =========================================
+   DISPLAY RULES
+========================================= */
+
+function displayRules() {
+
+    const container =
+        document.getElementById(
+            "rulesContainer"
+        );
 
 
-            let riskClass =
-                "high";
+    const rules =
+        RiskIQStorage.getRules();
 
 
-            let riskText =
-                "HIGH RISK";
+    container.innerHTML = "";
 
 
-            if (score >= 75) {
-
-                riskClass =
-                    "low";
-
-                riskText =
-                    "LOW RISK";
-
-            }
-
-            else if (score >= 50) {
-
-                riskClass =
-                    "medium";
-
-                riskText =
-                    "MEDIUM RISK";
-
-            }
+    document.getElementById(
+        "ruleCount"
+    ).textContent =
+        rules.length;
 
 
-            let decisionClass =
-                "review";
+    const total =
+        rules.reduce(
+            function (sum, rule) {
+
+                return sum +
+                    Number(rule.points || 0);
+
+            },
+            0
+        );
 
 
-            if (
-                application.decision ===
-                "APPROVED"
-            ) {
-
-                decisionClass =
-                    "approved";
-
-            }
-
-            else if (
-                application.decision ===
-                "DECLINED"
-            ) {
-
-                decisionClass =
-                    "declined";
-
-            }
+    document.getElementById(
+        "totalPoints"
+    ).textContent =
+        total;
 
 
-            const date =
-                application.createdAt
-                    ? new Date(
-                        application.createdAt
-                    ).toLocaleDateString()
-                    : "—";
+    if (rules.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <i class="fa-solid fa-sliders"></i>
+
+                <h3>No risk rules</h3>
+
+                <p>
+                    Add a rule to configure the Risk IQ engine.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
 
 
-            row.innerHTML = `
+    rules.forEach(
+        function (rule) {
 
-                <td>
+            const card =
+                document.createElement("div");
 
-                    <div class="borrower-cell">
 
-                        <div class="borrower-avatar">
+            card.className =
+                "rule-card";
 
-                            ${getInitials(
-                                application.fullName
-                            )}
 
-                        </div>
+            card.innerHTML = `
 
-                        <div>
+                <div class="rule-left">
 
-                            <strong>
-                                ${escapeHtml(
-                                    application.fullName ||
-                                    "Unknown"
-                                )}
-                            </strong>
+                    <div class="rule-icon">
 
-                            <small>
-                                ${escapeHtml(
-                                    application.idNumber ||
-                                    "No ID"
-                                )}
-                            </small>
-
-                        </div>
+                        <i class="fa-solid fa-shield-halved"></i>
 
                     </div>
 
-                </td>
 
+                    <div class="rule-info">
 
-                <td>
+                        <h3>
+                            ${escapeHtml(rule.name)}
+                        </h3>
 
-                    <strong>
-                        P${Number(
-                            application.loanAmount || 0
-                        ).toLocaleString()}
-                    </strong>
+                        <p>
+                            ${formatField(rule.field)}
+                            • Condition:
+                            ${escapeHtml(rule.condition)}
+                        </p>
 
-                    <small>
-                        ${application.loanTerm || 0} months
-                    </small>
-
-                </td>
-
-
-                <td>
-
-                    <div class="score-cell">
-
-                        <strong>
-                            ${score}/100
-                        </strong>
-
-                        <span class="risk-badge ${riskClass}">
-                            ${riskText}
+                        <span class="points">
+                            +${rule.points} risk points
                         </span>
 
                     </div>
 
-                </td>
+                </div>
 
 
-                <td>
+                <div class="rule-actions">
 
-                    <span class="verification-badge
-                        ${application.verificationStatus === "VERIFIED"
-                            ? "verified"
-                            : "pending"}">
+                    <button
+                        class="edit-btn"
+                        title="Edit"
+                        onclick="editRule(${rule.id})"
+                    >
 
-                        <i class="fa-solid
-                            ${application.verificationStatus === "VERIFIED"
-                                ? "fa-circle-check"
-                                : "fa-triangle-exclamation"}">
-                        </i>
+                        <i class="fa-solid fa-pen"></i>
 
-                        ${application.verificationStatus || "REVIEW"}
-
-                    </span>
-
-                </td>
+                    </button>
 
 
-                <td>
+                    <button
+                        class="delete-btn"
+                        title="Delete"
+                        onclick="deleteRule(${rule.id})"
+                    >
 
-                    <span class="decision-badge ${decisionClass}">
+                        <i class="fa-solid fa-trash"></i>
 
-                        ${application.decision || "PENDING"}
+                    </button>
 
-                    </span>
-
-                </td>
-
-
-                <td>
-
-                    <span class="date-cell">
-                        ${date}
-                    </span>
-
-                </td>
+                </div>
 
             `;
 
 
-            return row;
+            container.appendChild(
+                card
+            );
 
         }
+    );
+
+}
 
 
+/* =========================================
+   ADD RULE
+========================================= */
 
-        /* =================================================
-           STATISTICS
-           ================================================= */
+function openAddRule() {
 
-        function updateStats(
-            applications
-        ) {
-
-            let approved = 0;
-
-            let review = 0;
-
-            let declined = 0;
+    editingRuleId = null;
 
 
-            applications.forEach(
-                function (application) {
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "Add Risk Rule";
 
-                    if (
-                        application.decision ===
-                        "APPROVED"
-                    ) {
 
-                        approved++;
+    document.getElementById(
+        "ruleName"
+    ).value = "";
 
-                    }
 
-                    else if (
-                        application.decision ===
-                        "DECLINED"
-                    ) {
+    document.getElementById(
+        "ruleCondition"
+    ).value = "";
 
-                        declined++;
 
-                    }
+    document.getElementById(
+        "rulePoints"
+    ).value = "";
 
-                    else {
 
-                        review++;
+    document.getElementById(
+        "ruleModal"
+    ).classList.add("show");
 
-                    }
+}
+
+
+/* =========================================
+   EDIT RULE
+========================================= */
+
+function editRule(id) {
+
+    const rules =
+        RiskIQStorage.getRules();
+
+
+    const rule =
+        rules.find(
+            function (item) {
+
+                return item.id === id;
+
+            }
+        );
+
+
+    if (!rule) return;
+
+
+    editingRuleId = id;
+
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "Edit Risk Rule";
+
+
+    document.getElementById(
+        "ruleName"
+    ).value =
+        rule.name;
+
+
+    document.getElementById(
+        "ruleField"
+    ).value =
+        rule.field;
+
+
+    document.getElementById(
+        "ruleCondition"
+    ).value =
+        rule.condition;
+
+
+    document.getElementById(
+        "rulePoints"
+    ).value =
+        rule.points;
+
+
+    document.getElementById(
+        "ruleModal"
+    ).classList.add("show");
+
+}
+
+
+/* =========================================
+   SAVE RULE
+========================================= */
+
+function saveRule() {
+
+    const name =
+        document.getElementById(
+            "ruleName"
+        ).value.trim();
+
+
+    const field =
+        document.getElementById(
+            "ruleField"
+        ).value;
+
+
+    const condition =
+        document.getElementById(
+            "ruleCondition"
+        ).value.trim();
+
+
+    const points =
+        Number(
+            document.getElementById(
+                "rulePoints"
+            ).value
+        );
+
+
+    if (
+        !name ||
+        !condition ||
+        points <= 0
+    ) {
+
+        alert(
+            "Please complete all fields."
+        );
+
+        return;
+
+    }
+
+
+    const rules =
+        RiskIQStorage.getRules();
+
+
+    /* EDIT */
+
+    if (editingRuleId !== null) {
+
+        const index =
+            rules.findIndex(
+                function (rule) {
+
+                    return rule.id ===
+                        editingRuleId;
 
                 }
             );
 
 
-            document.getElementById(
-                "totalApplications"
-            ).textContent =
-                applications.length;
+        if (index !== -1) {
 
+            rules[index] = {
 
-            document.getElementById(
-                "approvedApplications"
-            ).textContent =
-                approved;
+                id:
+                    editingRuleId,
 
+                name,
 
-            document.getElementById(
-                "reviewApplications"
-            ).textContent =
-                review;
+                field,
 
+                condition,
 
-            document.getElementById(
-                "declinedApplications"
-            ).textContent =
-                declined;
+                points
 
-        }
-
-
-
-        /* =================================================
-           INITIALS
-           ================================================= */
-
-        function getInitials(
-            name
-        ) {
-
-            if (!name) {
-
-                return "??";
-
-            }
-
-
-            return name
-                .split(" ")
-                .slice(0, 2)
-                .map(
-                    word =>
-                        word.charAt(0)
-                )
-                .join("")
-                .toUpperCase();
-
-        }
-
-
-
-        /* =================================================
-           SAFE HTML
-           ================================================= */
-
-        function escapeHtml(
-            text
-        ) {
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-
-            div.textContent =
-                text;
-
-
-            return div.innerHTML;
+            };
 
         }
 
     }
-);
+
+
+    /* ADD */
+
+    else {
+
+        rules.push({
+
+            id:
+                Date.now(),
+
+            name,
+
+            field,
+
+            condition,
+
+            points
+
+        });
+
+    }
+
+
+    RiskIQStorage.saveRules(
+        rules
+    );
+
+
+    closeRuleModal();
+
+
+    displayRules();
+
+}
+
+
+/* =========================================
+   DELETE RULE
+========================================= */
+
+function deleteRule(id) {
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to delete this risk rule?"
+        );
+
+
+    if (!confirmed) return;
+
+
+    let rules =
+        RiskIQStorage.getRules();
+
+
+    rules =
+        rules.filter(
+            function (rule) {
+
+                return rule.id !== id;
+
+            }
+        );
+
+
+    RiskIQStorage.saveRules(
+        rules
+    );
+
+
+    displayRules();
+
+}
+
+
+/* =========================================
+   CLOSE MODAL
+========================================= */
+
+function closeRuleModal() {
+
+    document.getElementById(
+        "ruleModal"
+    ).classList.remove("show");
+
+}
+
+
+/* =========================================
+   FORMAT FIELD
+========================================= */
+
+function formatField(field) {
+
+    const names = {
+
+        repaymentBehaviour:
+            "Repayment Behaviour",
+
+        incomeStability:
+            "Income Stability",
+
+        previousDefaults:
+            "Previous Defaults",
+
+        debtRatio:
+            "Debt Ratio",
+
+        affordability:
+            "Affordability"
+
+    };
+
+
+    return names[field] || field;
+
+}
+
+
+/* =========================================
+   SAFE HTML
+========================================= */
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement("div");
+
+
+    div.textContent =
+        text;
+
+
+    return div.innerHTML;
+
+}
