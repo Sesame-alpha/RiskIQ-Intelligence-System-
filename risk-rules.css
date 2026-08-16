@@ -1,0 +1,135 @@
+/* =========================================================
+   RISK RULES
+   ========================================================= */
+
+.rules-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+}
+
+.rule-card {
+    display: flex;
+    gap: 15px;
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 18px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    animation: fade-up 0.3s ease both;
+}
+.rule-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.rule-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--gold-bg);
+    color: var(--gold-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 15px;
+}
+
+.rule-info { flex: 1; min-width: 0; }
+
+.rule-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+.rule-title h3 { font-size: 14.5px; }
+
+.rule-points {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--green);
+    background: var(--green-bg);
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.rule-info > p {
+    font-size: 12.5px;
+    color: var(--text-soft);
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.rule-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+}
+.rule-meta span {
+    font-size: 11.5px;
+    color: var(--text-faint);
+}
+.rule-meta strong { color: var(--text-soft); font-weight: 600; }
+
+/* ---------------------------- SLIDE-IN FORM PANEL ---------------------------- */
+
+.rule-form-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 420px;
+    max-width: 92vw;
+    background: var(--paper-card);
+    border-left: 1px solid var(--line);
+    box-shadow: var(--shadow-lg);
+    transform: translateX(100%);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 60;
+    overflow-y: auto;
+}
+
+.rule-form-panel.show {
+    transform: translateX(0);
+}
+
+.rule-form-panel .panel-title {
+    padding: 24px 24px 0;
+    align-items: center;
+}
+
+.rule-form-panel .form-grid {
+    grid-template-columns: 1fr;
+    padding: 22px 24px 0;
+}
+
+.rule-form-panel .form-group:has(textarea) {
+    padding: 0 24px;
+    margin-top: 16px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 24px;
+    margin-top: 8px;
+}
+
+/* dim the page behind the panel when open */
+.rule-form-panel.show::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(16, 25, 43, 0.35);
+    z-index: -1;
+    width: 100vw;
+    right: 0;
+    left: auto;
+}
