@@ -1,135 +1,534 @@
 /* =========================================================
-   RISK RULES
+   RISK IQ - LOAN APPLICATIONS
    ========================================================= */
 
-.rules-container {
+.application-stats {
+
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 16px;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 22px;
+
 }
 
-.rule-card {
-    display: flex;
-    gap: 15px;
-    background: var(--paper-card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-sm);
-    padding: 18px;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-    animation: fade-up 0.3s ease both;
-}
-.rule-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+
+.application-stat {
+
+    background: #ffffff;
+
+    border: 1px solid #e6e8ee;
+
+    border-radius: 13px;
+
+    padding: 18px 20px;
+
 }
 
-.rule-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: var(--gold-bg);
-    color: var(--gold-deep);
+
+.application-stat span {
+
+    display: block;
+
+    color: #7b8492;
+
+    font-size: 12px;
+
+    margin-bottom: 7px;
+
+}
+
+
+.application-stat strong {
+
+    font-size: 25px;
+
+    color: #202733;
+
+}
+
+
+
+/* =========================================================
+   FILTER
+   ========================================================= */
+
+.filter-card {
+
+    margin-bottom: 20px;
+
+}
+
+
+.filter-row {
+
     display: flex;
+
     align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.search-box {
+
+    flex: 1;
+
+    position: relative;
+
+}
+
+
+.search-box i {
+
+    position: absolute;
+
+    left: 13px;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    color: #8a93a2;
+
+}
+
+
+.search-box input {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 12px 14px 12px 38px;
+
+    border: 1px solid #dfe3e9;
+
+    border-radius: 9px;
+
+    outline: none;
+
+}
+
+
+.search-box input:focus {
+
+    border-color: #b38b35;
+
+}
+
+
+.filter-row select {
+
+    min-width: 180px;
+
+    padding: 12px;
+
+    border: 1px solid #dfe3e9;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #343b48;
+
+}
+
+
+.refresh-button {
+
+    padding: 12px 16px;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe3e9;
+
+    border-radius: 9px;
+
+    color: #4d5665;
+
+    cursor: pointer;
+
+}
+
+
+.refresh-button:hover {
+
+    border-color: #b38b35;
+
+    color: #b38b35;
+
+}
+
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.table-wrapper {
+
+    overflow-x: auto;
+
+}
+
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+thead {
+
+    background: #fafafa;
+
+}
+
+
+th {
+
+    text-align: left;
+
+    padding: 13px;
+
+    font-size: 10px;
+
+    letter-spacing: 0.6px;
+
+    color: #89919e;
+
+    border-bottom: 1px solid #e9ebef;
+
+}
+
+
+td {
+
+    padding: 17px 13px;
+
+    border-bottom: 1px solid #edf0f3;
+
+    color: #303744;
+
+    font-size: 13px;
+
+}
+
+
+tbody tr:hover {
+
+    background: #fcfcfd;
+
+}
+
+
+td small {
+
+    display: block;
+
+    color: #8a93a1;
+
+    margin-top: 4px;
+
+    font-size: 11px;
+
+}
+
+
+
+/* =========================================================
+   BORROWER
+   ========================================================= */
+
+.borrower-cell {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+
+.borrower-avatar {
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 50%;
+
+    background: #f5ead3;
+
+    color: #a27b2d;
+
+    display: flex;
+
+    align-items: center;
+
     justify-content: center;
-    flex-shrink: 0;
-    font-size: 15px;
-}
 
-.rule-info { flex: 1; min-width: 0; }
+    font-size: 11px;
 
-.rule-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 6px;
-}
-.rule-title h3 { font-size: 14.5px; }
-
-.rule-points {
-    font-family: var(--font-mono);
-    font-size: 10.5px;
     font-weight: 700;
-    color: var(--green);
-    background: var(--green-bg);
-    padding: 3px 9px;
-    border-radius: 20px;
-    white-space: nowrap;
+
 }
 
-.rule-info > p {
-    font-size: 12.5px;
-    color: var(--text-soft);
-    line-height: 1.5;
-    margin-bottom: 12px;
+
+.borrower-cell strong {
+
+    display: block;
+
 }
 
-.rule-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px 18px;
-}
-.rule-meta span {
-    font-size: 11.5px;
-    color: var(--text-faint);
-}
-.rule-meta strong { color: var(--text-soft); font-weight: 600; }
 
-/* ---------------------------- SLIDE-IN FORM PANEL ---------------------------- */
 
-.rule-form-panel {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 420px;
-    max-width: 92vw;
-    background: var(--paper-card);
-    border-left: 1px solid var(--line);
-    box-shadow: var(--shadow-lg);
-    transform: translateX(100%);
-    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-    z-index: 60;
-    overflow-y: auto;
+/* =========================================================
+   SCORE
+   ========================================================= */
+
+.score-cell strong {
+
+    display: block;
+
+    margin-bottom: 5px;
+
 }
 
-.rule-form-panel.show {
-    transform: translateX(0);
+
+.risk-badge {
+
+    display: inline-block;
+
+    padding: 4px 7px;
+
+    border-radius: 12px;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
 }
 
-.rule-form-panel .panel-title {
-    padding: 24px 24px 0;
+
+.risk-badge.low {
+
+    background: #e8f6ef;
+
+    color: #19734b;
+
+}
+
+
+.risk-badge.medium {
+
+    background: #fff4dc;
+
+    color: #9b6c18;
+
+}
+
+
+.risk-badge.high {
+
+    background: #fbeaea;
+
+    color: #a63838;
+
+}
+
+
+
+/* =========================================================
+   VERIFICATION
+   ========================================================= */
+
+.verification-badge {
+
+    display: inline-flex;
+
     align-items: center;
+
+    gap: 5px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
 }
 
-.rule-form-panel .form-grid {
-    grid-template-columns: 1fr;
-    padding: 22px 24px 0;
+
+.verification-badge.verified {
+
+    color: #18764d;
+
 }
 
-.rule-form-panel .form-group:has(textarea) {
-    padding: 0 24px;
-    margin-top: 16px;
+
+.verification-badge.pending {
+
+    color: #9b6c18;
+
 }
 
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    padding: 24px;
-    margin-top: 8px;
+
+
+/* =========================================================
+   DECISION
+   ========================================================= */
+
+.decision-badge {
+
+    display: inline-block;
+
+    padding: 6px 9px;
+
+    border-radius: 15px;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
 }
 
-/* dim the page behind the panel when open */
-.rule-form-panel.show::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: rgba(16, 25, 43, 0.35);
-    z-index: -1;
-    width: 100vw;
-    right: 0;
-    left: auto;
+
+.decision-badge.approved {
+
+    color: #18764d;
+
+    background: #e7f5ed;
+
+}
+
+
+.decision-badge.declined {
+
+    color: #a33838;
+
+    background: #fbe9e9;
+
+}
+
+
+.decision-badge.review {
+
+    color: #936819;
+
+    background: #fff3d8;
+
+}
+
+
+
+/* =========================================================
+   DATE
+   ========================================================= */
+
+.date-cell {
+
+    color: #7b8491;
+
+    font-size: 12px;
+
+}
+
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.empty-table {
+
+    text-align: center;
+
+    padding: 60px 20px !important;
+
+}
+
+
+.empty-table i {
+
+    display: block;
+
+    font-size: 32px;
+
+    color: #b38b35;
+
+    margin-bottom: 12px;
+
+}
+
+
+.empty-table strong {
+
+    display: block;
+
+    color: #303744;
+
+    margin-bottom: 5px;
+
+}
+
+
+.empty-table span {
+
+    color: #8a92a0;
+
+    font-size: 12px;
+
+}
+
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .application-stats {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .filter-row {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .filter-row select {
+
+        width: 100%;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .application-stats {
+
+        grid-template-columns: 1fr;
+
+    }
+
 }
