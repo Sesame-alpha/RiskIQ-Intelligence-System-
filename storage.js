@@ -1,6 +1,10 @@
+/* =========================================================
+   RISK IQ - STORAGE
+   ========================================================= */
+
 const RiskIQStorage = {
 
-    // ================= APPLICATIONS =================
+    /* ================= APPLICATIONS ================= */
 
     getApplications() {
         return JSON.parse(
@@ -12,7 +16,7 @@ const RiskIQStorage = {
 
         const applications = this.getApplications();
 
-        applications.push(application);
+        applications.unshift(application);
 
         localStorage.setItem(
             "riskIQApplications",
@@ -21,15 +25,72 @@ const RiskIQStorage = {
     },
 
 
-    // ================= RISK RULES =================
+    /* ================= RISK RULES ================= */
 
     getRules() {
 
-        return JSON.parse(
+        let rules = JSON.parse(
             localStorage.getItem("riskIQRiskRules") || "[]"
         );
 
+        // Create the 5 default rules if none exist
+        if (rules.length === 0) {
+
+            rules = [
+
+                {
+                    id: 1,
+                    name: "Good Repayment Behaviour",
+                    field: "repaymentBehaviour",
+                    condition: "good",
+                    points: 25,
+                    status: "Active"
+                },
+
+                {
+                    id: 2,
+                    name: "Stable Income",
+                    field: "incomeStability",
+                    condition: "stable",
+                    points: 20,
+                    status: "Active"
+                },
+
+                {
+                    id: 3,
+                    name: "No Previous Defaults",
+                    field: "previousDefaults",
+                    condition: "zero",
+                    points: 20,
+                    status: "Active"
+                },
+
+                {
+                    id: 4,
+                    name: "Low Debt Ratio",
+                    field: "debtRatio",
+                    condition: "low",
+                    points: 20,
+                    status: "Active"
+                },
+
+                {
+                    id: 5,
+                    name: "Affordable Loan",
+                    field: "affordability",
+                    condition: "good",
+                    points: 15,
+                    status: "Active"
+                }
+
+            ];
+
+            this.saveRules(rules);
+        }
+
+        return rules;
     },
+
 
     saveRules(rules) {
 
@@ -37,84 +98,68 @@ const RiskIQStorage = {
             "riskIQRiskRules",
             JSON.stringify(rules)
         );
-
     },
 
 
-    // ================= LOGIN =================
+    addRule(rule) {
 
-    isLoggedIn() {
+        const rules = this.getRules();
 
-        return localStorage.getItem(
-            "riskIQLoggedIn"
-        ) === "true";
+        rule.id = Date.now();
 
+        rules.push(rule);
+
+        this.saveRules(rules);
     },
 
 
-    login(user) {
+    updateRule(id, updatedRule) {
 
-        localStorage.setItem(
-            "riskIQLoggedIn",
-            "true"
-        );
+        const rules = this.getRules();
 
-        localStorage.setItem(
-            "riskiq_user",
-            JSON.stringify(user)
-        );
+        const index =
+            rules.findIndex(
+                rule => Number(rule.id) === Number(id)
+            );
 
-    },
+        if (index !== -1) {
 
+            rules[index] = {
+                ...rules[index],
+                ...updatedRule
+            };
 
-    logout() {
-
-        localStorage.removeItem(
-            "riskIQLoggedIn"
-        );
-
-        localStorage.removeItem(
-            "riskiq_user"
-        );
-
-        window.location.href =
-            "login.html";
-
-    },
-
-
-    // ================= PAGE PROTECTION =================
-
-    protectPage() {
-
-        if (!this.isLoggedIn()) {
-
-            window.location.href =
-                "login.html";
-
+            this.saveRules(rules);
         }
-
     },
 
 
-    // ================= VERIFICATION DATA =================
+    deleteRule(id) {
+
+        const rules = this.getRules();
+
+        const updatedRules =
+            rules.filter(
+                rule => Number(rule.id) !== Number(id)
+            );
+
+        this.saveRules(updatedRules);
+    },
+
+
+    /* ================= VERIFICATION DATA ================= */
 
     getVerificationData() {
 
-        const existing =
-            localStorage.getItem(
-                "riskIQVerificationData"
-            );
+        const saved =
+            localStorage.getItem("riskIQVerificationData");
 
-        if (existing) {
-
-            return JSON.parse(existing);
-
+        if (saved) {
+            return JSON.parse(saved);
         }
 
 
         // Demo borrower
-
         const demoData = [
 
             {
@@ -122,7 +167,7 @@ const RiskIQStorage = {
                 fullName: "John Molefe",
                 employmentStatus: "employed",
                 monthlyIncome: 15000,
-                monthlyDebt: 2000
+                monthlyDebt: 2500
             }
 
         ];
@@ -133,9 +178,34 @@ const RiskIQStorage = {
             JSON.stringify(demoData)
         );
 
-
         return demoData;
+    },
 
+
+    /* ================= LOGIN ================= */
+
+    isLoggedIn() {
+
+        return (
+            localStorage.getItem("riskIQLoggedIn") === "true"
+        );
+    },
+
+
+    protectPage() {
+
+        if (!this.isLoggedIn()) {
+
+            window.location.href = "login.html";
+        }
+    },
+
+
+    logout() {
+
+        localStorage.removeItem("riskIQLoggedIn");
+
+        window.location.href = "login.html";
     }
 
 };
