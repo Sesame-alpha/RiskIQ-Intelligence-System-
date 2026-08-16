@@ -1,239 +1,496 @@
-const rulesContainer = document.getElementById("rulesContainer");
-const ruleFormPanel = document.getElementById("ruleFormPanel");
-const ruleForm = document.getElementById("ruleForm");
+/* =========================================================
+   RISK IQ - LOAN APPLICATIONS
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
 
-// ===============================
-// LOAD RULES
-// ===============================
-
-function loadRules() {
-
-    const rules = RiskIQStorage.getRules();
-
-    rulesContainer.innerHTML = "";
-
-    document.getElementById("ruleCount").textContent =
-        rules.length;
-
-    const totalPoints = rules.reduce(
-        (total, rule) => total + Number(rule.points),
-        0
-    );
-
-    document.getElementById("totalPoints").textContent =
-        totalPoints;
+        const searchInput =
+            document.getElementById(
+                "searchInput"
+            );
 
 
-    if (rules.length === 0) {
+        const decisionFilter =
+            document.getElementById(
+                "decisionFilter"
+            );
 
-        rulesContainer.innerHTML = `
-            <div class="empty-state">
-                <i class="fa-solid fa-sliders"></i>
-                <h3>No risk rules</h3>
-                <p>Create your first risk rule.</p>
-            </div>
-        `;
 
-        return;
+        const refreshButton =
+            document.getElementById(
+                "refreshButton"
+            );
+
+
+        searchInput.addEventListener(
+            "input",
+            renderApplications
+        );
+
+
+        decisionFilter.addEventListener(
+            "change",
+            renderApplications
+        );
+
+
+        refreshButton.addEventListener(
+            "click",
+            renderApplications
+        );
+
+
+        renderApplications();
+
+
+
+        /* =================================================
+           RENDER
+           ================================================= */
+
+        function renderApplications() {
+
+            const applications =
+                RiskIQStorage.getApplications();
+
+
+            updateStats(
+                applications
+            );
+
+
+            const search =
+                searchInput.value
+                    .trim()
+                    .toLowerCase();
+
+
+            const filter =
+                decisionFilter.value;
+
+
+            const filtered =
+                applications.filter(
+                    function (application) {
+
+                        const name =
+                            String(
+                                application.fullName || ""
+                            ).toLowerCase();
+
+
+                        const id =
+                            String(
+                                application.idNumber || ""
+                            ).toLowerCase();
+
+
+                        const matchesSearch =
+                            name.includes(search) ||
+                            id.includes(search);
+
+
+                        const matchesDecision =
+                            filter === "all" ||
+                            application.decision === filter;
+
+
+                        return (
+                            matchesSearch &&
+                            matchesDecision
+                        );
+
+                    }
+                );
+
+
+            const table =
+                document.getElementById(
+                    "applicationsTable"
+                );
+
+
+            table.innerHTML = "";
+
+
+            if (filtered.length === 0) {
+
+                table.innerHTML = `
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="empty-table"
+                        >
+
+                            <i class="fa-solid fa-file-circle-xmark"></i>
+
+                            <strong>
+                                No applications found
+                            </strong>
+
+                            <span>
+                                Completed borrower assessments will appear here.
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+                return;
+
+            }
+
+
+            /*
+             * Newest applications first
+             */
+
+            filtered
+                .slice()
+                .reverse()
+                .forEach(
+                    function (application) {
+
+                        table.appendChild(
+                            createRow(
+                                application
+                            )
+                        );
+
+                    }
+                );
+
+        }
+
+
+
+        /* =================================================
+           CREATE TABLE ROW
+           ================================================= */
+
+        function createRow(
+            application
+        ) {
+
+            const row =
+                document.createElement("tr");
+
+
+            const score =
+                Number(
+                    application.riskScore
+                ) || 0;
+
+
+            let riskClass =
+                "high";
+
+
+            let riskText =
+                "HIGH RISK";
+
+
+            if (score >= 75) {
+
+                riskClass =
+                    "low";
+
+                riskText =
+                    "LOW RISK";
+
+            }
+
+            else if (score >= 50) {
+
+                riskClass =
+                    "medium";
+
+                riskText =
+                    "MEDIUM RISK";
+
+            }
+
+
+            let decisionClass =
+                "review";
+
+
+            if (
+                application.decision ===
+                "APPROVED"
+            ) {
+
+                decisionClass =
+                    "approved";
+
+            }
+
+            else if (
+                application.decision ===
+                "DECLINED"
+            ) {
+
+                decisionClass =
+                    "declined";
+
+            }
+
+
+            const date =
+                application.createdAt
+                    ? new Date(
+                        application.createdAt
+                    ).toLocaleDateString()
+                    : "—";
+
+
+            row.innerHTML = `
+
+                <td>
+
+                    <div class="borrower-cell">
+
+                        <div class="borrower-avatar">
+
+                            ${getInitials(
+                                application.fullName
+                            )}
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                ${escapeHtml(
+                                    application.fullName ||
+                                    "Unknown"
+                                )}
+                            </strong>
+
+                            <small>
+                                ${escapeHtml(
+                                    application.idNumber ||
+                                    "No ID"
+                                )}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </td>
+
+
+                <td>
+
+                    <strong>
+                        P${Number(
+                            application.loanAmount || 0
+                        ).toLocaleString()}
+                    </strong>
+
+                    <small>
+                        ${application.loanTerm || 0} months
+                    </small>
+
+                </td>
+
+
+                <td>
+
+                    <div class="score-cell">
+
+                        <strong>
+                            ${score}/100
+                        </strong>
+
+                        <span class="risk-badge ${riskClass}">
+                            ${riskText}
+                        </span>
+
+                    </div>
+
+                </td>
+
+
+                <td>
+
+                    <span class="verification-badge
+                        ${application.verificationStatus === "VERIFIED"
+                            ? "verified"
+                            : "pending"}">
+
+                        <i class="fa-solid
+                            ${application.verificationStatus === "VERIFIED"
+                                ? "fa-circle-check"
+                                : "fa-triangle-exclamation"}">
+                        </i>
+
+                        ${application.verificationStatus || "REVIEW"}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <span class="decision-badge ${decisionClass}">
+
+                        ${application.decision || "PENDING"}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <span class="date-cell">
+                        ${date}
+                    </span>
+
+                </td>
+
+            `;
+
+
+            return row;
+
+        }
+
+
+
+        /* =================================================
+           STATISTICS
+           ================================================= */
+
+        function updateStats(
+            applications
+        ) {
+
+            let approved = 0;
+
+            let review = 0;
+
+            let declined = 0;
+
+
+            applications.forEach(
+                function (application) {
+
+                    if (
+                        application.decision ===
+                        "APPROVED"
+                    ) {
+
+                        approved++;
+
+                    }
+
+                    else if (
+                        application.decision ===
+                        "DECLINED"
+                    ) {
+
+                        declined++;
+
+                    }
+
+                    else {
+
+                        review++;
+
+                    }
+
+                }
+            );
+
+
+            document.getElementById(
+                "totalApplications"
+            ).textContent =
+                applications.length;
+
+
+            document.getElementById(
+                "approvedApplications"
+            ).textContent =
+                approved;
+
+
+            document.getElementById(
+                "reviewApplications"
+            ).textContent =
+                review;
+
+
+            document.getElementById(
+                "declinedApplications"
+            ).textContent =
+                declined;
+
+        }
+
+
+
+        /* =================================================
+           INITIALS
+           ================================================= */
+
+        function getInitials(
+            name
+        ) {
+
+            if (!name) {
+
+                return "??";
+
+            }
+
+
+            return name
+                .split(" ")
+                .slice(0, 2)
+                .map(
+                    word =>
+                        word.charAt(0)
+                )
+                .join("")
+                .toUpperCase();
+
+        }
+
+
+
+        /* =================================================
+           SAFE HTML
+           ================================================= */
+
+        function escapeHtml(
+            text
+        ) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.textContent =
+                text;
+
+
+            return div.innerHTML;
+
+        }
+
     }
-
-
-    rules.forEach(rule => {
-
-        const card = document.createElement("div");
-
-        card.className = "rule-card";
-
-        card.innerHTML = `
-
-            <div class="rule-icon">
-                <i class="fa-solid fa-shield-halved"></i>
-            </div>
-
-            <div class="rule-info">
-
-                <div class="rule-title">
-
-                    <h3>${escapeHTML(rule.name)}</h3>
-
-                    <span class="rule-points">
-                        +${rule.points} points
-                    </span>
-
-                </div>
-
-                <p>
-                    ${escapeHTML(rule.description || "Risk assessment rule")}
-                </p>
-
-                <div class="rule-meta">
-
-                    <span>
-                        <strong>Field:</strong>
-                        ${escapeHTML(rule.field)}
-                    </span>
-
-                    <span>
-                        <strong>Condition:</strong>
-                        ${escapeHTML(rule.condition)}
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <button
-                class="delete-button"
-                onclick="deleteRule(${rule.id})"
-            >
-
-                <i class="fa-solid fa-trash"></i>
-
-            </button>
-
-        `;
-
-        rulesContainer.appendChild(card);
-
-    });
-
-}
-
-
-// ===============================
-// OPEN FORM
-// ===============================
-
-function openRuleForm() {
-
-    ruleFormPanel.classList.add("show");
-
-}
-
-
-// ===============================
-// CLOSE FORM
-// ===============================
-
-function closeRuleForm() {
-
-    ruleFormPanel.classList.remove("show");
-
-    ruleForm.reset();
-
-}
-
-
-// ===============================
-// ADD RULE
-// ===============================
-
-ruleForm.addEventListener("submit", function(event) {
-
-    event.preventDefault();
-
-
-    const rules = RiskIQStorage.getRules();
-
-
-    const newRule = {
-
-        id: Date.now(),
-
-        name: document.getElementById("ruleName").value,
-
-        field: document.getElementById("ruleField").value,
-
-        condition: document.getElementById("ruleCondition").value,
-
-        points: Number(
-            document.getElementById("rulePoints").value
-        ),
-
-        description:
-            document.getElementById("ruleDescription").value
-
-    };
-
-
-    rules.push(newRule);
-
-    RiskIQStorage.saveRules(rules);
-
-
-    closeRuleForm();
-
-    loadRules();
-
-});
-
-
-// ===============================
-// DELETE RULE
-// ===============================
-
-function deleteRule(id) {
-
-    const confirmed =
-        confirm("Delete this risk rule?");
-
-    if (!confirmed) return;
-
-
-    let rules = RiskIQStorage.getRules();
-
-    rules = rules.filter(
-        rule => rule.id !== id
-    );
-
-
-    RiskIQStorage.saveRules(rules);
-
-    loadRules();
-
-}
-
-
-// ===============================
-// SIDEBAR
-// ===============================
-
-function toggleSidebar() {
-
-    document
-        .querySelector(".sidebar")
-        .classList.toggle("collapsed");
-
-
-    document
-        .querySelector(".main")
-        .classList.toggle("collapsed");
-
-}
-
-
-// ===============================
-// BASIC SECURITY
-// ===============================
-
-function escapeHTML(value) {
-
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-
-}
-
-
-// ===============================
-// START
-// ===============================
-
-RiskIQStorage.protectPage();
-
-loadRules();
+);
